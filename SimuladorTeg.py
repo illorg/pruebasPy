@@ -71,7 +71,7 @@ for simulacion in range(0, simulaciones):
         vict_defensa += 1
     if simulacion/simulaciones*100 >= proceso_porct + 10:
         proceso_porct += 10
-        print('Simulando: %' + str(proceso_porct) )
+        print('Simulando: %' + str(proceso_porct))
 print('Simulaciones totales: ' + str(simulaciones))
 print('Victoria ataque: %' + str(round(vict_ataque/simulaciones*100, 2)))
 print('Victoria defensa: %' + str(round(vict_defensa/simulaciones*100, 2)))
