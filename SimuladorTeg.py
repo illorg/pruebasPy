@@ -1,5 +1,8 @@
 import random
+import datetime
 import sys
+import mysql.connector
+from mysql.connector import Error
 
 fichas_ataque = 0
 fichas_defensa = 0
@@ -16,7 +19,9 @@ def jugar(fatq, fdef):
     dados_defensa = [0, 0, 0 ]
     lanzamiento = ()
     comparar = 3
-    
+
+
+
     while fatq > 1 and fdef > 0:
         if fatq > 3: cant_d_ataque = 3
         elif fatq == 3: cant_d_ataque = 2
@@ -73,6 +78,38 @@ for simulacion in range(0, simulaciones):
     if simulacion/simulaciones*100 >= proceso_porct + 10:
         proceso_porct += 10
         print('Simulando: %' + str(proceso_porct))
+porct_vict = str(round(vict_ataque/simulaciones*100, 2))
+porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
 print('Simulaciones totales: ' + str(simulaciones))
-print('Victoria ataque: %' + str(round(vict_ataque/simulaciones*100, 2)))
-print('Victoria defensa: %' + str(round(vict_defensa/simulaciones*100, 2)))
+print('Victoria ataque: %' + porct_vict)
+print('Victoria defensa: %' + porct_derrot)
+
+## conector SQL para guardar datos en mi server MySql
+try:
+    connection = mysql.connector.connect(host='192.168.100.7',
+                                         database='SimuladorTeg',
+                                         user='adminer',
+                                         password='Ledhouse130d')
+    if connection.is_connected():
+        db_Info = connection.get_server_info()
+        print('')
+        print("Conectado a illo MySql Version ", db_Info)
+        cursor = connection.cursor()
+        cursor.execute("select database();")
+        record = cursor.fetchone()
+        print("Esta conectado a la Base de datos: ", record)
+        mySql_insert_query = """INSERT INTO registro (fecha, simulaciones, fichas_ataque, fichas_defensa, porct_victoria_ataque, porct_victoria_defensa) 
+                           VALUES (%s, %s, %s, %s, %s, %s) """
+        recordTuple = (datetime.date.today(), simulaciones, fichas_ataque, fichas_defensa, porct_vict, porct_derrot)
+        cursor.execute(mySql_insert_query, recordTuple)
+        connection.commit()
+        print("registro almacenado exitosamente")
+
+except Error as e:
+    print("Error conectado a illo MySQL", e)
+finally:
+    
+    if (connection.is_connected()):
+        cursor.close()
+        connection.close()
+        print("la conexion MySql fue desactivada")
