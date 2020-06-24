@@ -1,21 +1,22 @@
 import random
 import sys
-dados_ataque = [0, 0, 0]
-dados_defensa = [0, 0, 0]
-fichas_ataque = 6
-fichas_defensa = 4
+
+fichas_ataque = 0
+fichas_defensa = 0
 simulaciones = 10000
 vict_ataque = 0
 vict_defensa = 0
-cant_d_defensa = 0
-cant_d_ataque = 0
 
 
 def jugar(fatq, fdef):
 
-    global cant_d_ataque
-    global cant_d_defensa
+    cant_d_ataque = 0
+    cant_d_defensa = 0
+    dados_ataque = [0, 0, 0 ]
+    dados_defensa = [0, 0, 0 ]
+    lanzamiento = ()
     comparar = 3
+    
     while fatq > 1 and fdef > 0:
         if fatq > 3: cant_d_ataque = 3
         elif fatq == 3: cant_d_ataque = 2
@@ -25,26 +26,26 @@ def jugar(fatq, fdef):
         elif fdef == 2: cant_d_defensa = 2
         else: cant_d_defensa = 1
 
-        tirar_dados()
+        lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))
         if cant_d_ataque <= cant_d_defensa:
             comparar = cant_d_ataque
         else: comparar = cant_d_defensa
 
         for comp in range(0, comparar):
-            if dados_ataque[comp] > dados_defensa[comp]:
+            if int(lanzamiento[0][comp]) > int(lanzamiento[1][comp]):
                 fdef -= 1
             else: fatq -= 1
     #print(fatq)
     #print(fdef)
+    dados_ataque = [0, 0, 0]
+    dados_defensa = [0, 0, 0]
     if fdef == 0: return "gana ataque"
     else: return "gana defensa "
 
 
-def tirar_dados():
-    global cant_d_ataque
-    global cant_d_defensa
-    global dados_ataque
-    global dados_defensa
+def tirar_dados(cant_d_ataque, cant_d_defensa):
+        
+    
     dados_ataque = [0, 0, 0]
     dados_defensa = [0, 0, 0]
     for x in range(0, 3):
@@ -56,7 +57,7 @@ def tirar_dados():
     dados_defensa.sort(reverse=True)
     #print(dados_ataque)
     #print(dados_defensa)
-
+    return (dados_ataque, dados_defensa)
 
 # EJECUCION ######
 if len(sys.argv) > 1:
