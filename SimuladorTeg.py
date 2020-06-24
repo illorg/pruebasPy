@@ -86,7 +86,7 @@ print('Victoria defensa: %' + porct_derrot)
 
 ## conector SQL para guardar datos en mi server MySql
 try:
-    connection = mysql.connector.connect(host='192.168.100.7',
+    connection = mysql.connector.connect(host='179.62.88.24',
                                          database='SimuladorTeg',
                                          user='adminer',
                                          password='Ledhouse130d')
@@ -100,7 +100,8 @@ try:
         print("Esta conectado a la Base de datos: ", record)
         mySql_insert_query = """INSERT INTO registro (fecha, simulaciones, fichas_ataque, fichas_defensa, porct_victoria_ataque, porct_victoria_defensa) 
                            VALUES (%s, %s, %s, %s, %s, %s) """
-        recordTuple = (datetime.date.today(), simulaciones, fichas_ataque, fichas_defensa, porct_vict, porct_derrot)
+        recordTuple = (datetime.date.today(), simulaciones, fichas_ataque, \
+            fichas_defensa, porct_vict, porct_derrot)
         cursor.execute(mySql_insert_query, recordTuple)
         connection.commit()
         print("registro almacenado exitosamente")
