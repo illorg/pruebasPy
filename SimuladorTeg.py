@@ -15,8 +15,6 @@ def jugar(fatq, fdef):
 
     cant_d_ataque = 0
     cant_d_defensa = 0
-    dados_ataque = [0, 0, 0 ]
-    dados_defensa = [0, 0, 0 ]
     lanzamiento = ()
     comparar = 3
 
@@ -40,10 +38,6 @@ def jugar(fatq, fdef):
             if int(lanzamiento[0][comp]) > int(lanzamiento[1][comp]):
                 fdef -= 1
             else: fatq -= 1
-    #print(fatq)
-    #print(fdef)
-    dados_ataque = [0, 0, 0]
-    dados_defensa = [0, 0, 0]
     if fdef == 0: return "gana ataque"
     else: return "gana defensa "
 
@@ -70,7 +64,7 @@ if len(sys.argv) > 1:
 proceso_porct = 0
 fichas_ataque = int(input('Ingrese fichas del atacante: '))
 fichas_defensa = int(input('ingrese fichas del defensor: '))
-for simulacion in range(0, simulaciones):
+for simulacion in range(0, simulaciones):  ## Ciclo for de simulacciones : por defect 10mil
     if jugar(fichas_ataque, fichas_defensa) == "gana ataque":
         vict_ataque += 1
     else:
@@ -84,7 +78,7 @@ print('Simulaciones totales: ' + str(simulaciones))
 print('Victoria ataque: %' + porct_vict)
 print('Victoria defensa: %' + porct_derrot)
 
-## conector SQL para guardar datos en mi server MySql
+# conector SQL para guardar datos en mi server MySql
 try:
     connection = mysql.connector.connect(host='179.62.88.24',
                                          database='SimuladorTeg',
@@ -109,7 +103,7 @@ try:
 except Error as e:
     print("Error conectado a illo MySQL", e)
 finally:
-    
+
     if (connection.is_connected()):
         cursor.close()
         connection.close()
