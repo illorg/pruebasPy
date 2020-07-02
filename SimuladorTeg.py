@@ -64,12 +64,12 @@ if len(sys.argv) > 1:
 proceso_porct = 0
 fichas_ataque = int(input('Ingrese fichas del atacante: '))
 fichas_defensa = int(input('ingrese fichas del defensor: '))
-for simulacion in range(0, simulaciones):  ## Ciclo for de simulacciones : por defect 10mil
-    if jugar(fichas_ataque, fichas_defensa) == "gana ataque":
+for simulacion in range(simulaciones):  ## Ciclo for de simulacciones : por defect 10mil
+    if jugar(fichas_ataque, fichas_defensa) == "gana ataque": # llama funcion jugar, envia cant fichas, devuelve ganador
         vict_ataque += 1
     else:
         vict_defensa += 1
-    if simulacion/simulaciones*100 >= proceso_porct + 10:
+    if simulacion/simulaciones*100 >= proceso_porct + 10: # porcentaje de calculo simulaciones
         proceso_porct += 10
         print('Simulando: %' + str(proceso_porct))
 porct_vict = str(round(vict_ataque/simulaciones*100, 2))
