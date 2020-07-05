@@ -18,9 +18,7 @@ def jugar(fatq, fdef):
     lanzamiento = ()
     comparar = 3
 
-
-
-    while fatq > 1 and fdef > 0:
+    while fatq > 1 and fdef > 0: # Juega hasta que se acaben fichas
         if fatq > 3: cant_d_ataque = 3
         elif fatq == 3: cant_d_ataque = 2
         else: cant_d_ataque = 1
@@ -29,7 +27,7 @@ def jugar(fatq, fdef):
         elif fdef == 2: cant_d_defensa = 2
         else: cant_d_defensa = 1
 
-        lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))
+        lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))  # llama tirar dados
         if cant_d_ataque <= cant_d_defensa:
             comparar = cant_d_ataque
         else: comparar = cant_d_defensa
@@ -54,13 +52,13 @@ def tirar_dados(cant_d_ataque, cant_d_defensa):
             dados_defensa[x] = random.randint(1, 6)
     dados_ataque.sort(reverse=True)
     dados_defensa.sort(reverse=True)
-    #print(dados_ataque)
-    #print(dados_defensa)
     return (dados_ataque, dados_defensa)
+
 
 # EJECUCION ######
 if len(sys.argv) > 1:
     simulaciones = int(sys.argv[1])
+
 proceso_porct = 0
 fichas_ataque = int(input('Ingrese fichas del atacante: '))
 fichas_defensa = int(input('ingrese fichas del defensor: '))
