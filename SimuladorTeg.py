@@ -3,6 +3,7 @@ import datetime
 import sys
 import mysql.connector
 from mysql.connector import Error
+from time import time
 
 fichas_ataque = 0
 fichas_defensa = 0
@@ -62,6 +63,7 @@ if len(sys.argv) > 1:
 proceso_porct = 0
 fichas_ataque = int(input('Ingrese fichas del atacante: '))
 fichas_defensa = int(input('ingrese fichas del defensor: '))
+t = time() # start time for the for loop
 for simulacion in range(simulaciones):  ## Ciclo for de simulacciones : por defect 10mil
     if jugar(fichas_ataque, fichas_defensa) == "gana ataque": # llama funcion jugar, envia cant fichas, devuelve ganador
         vict_ataque += 1
@@ -75,7 +77,7 @@ porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
 print('Simulaciones totales: ' + str(simulaciones))
 print('Victoria ataque: %' + porct_vict)
 print('Victoria defensa: %' + porct_derrot)
-
+print('Tiempo consumido en el calculo : {:.4f} s'.format(time() - t))
 # conector SQL para guardar datos en mi server MySql
 try:
     connection = mysql.connector.connect(host='179.62.88.24',
