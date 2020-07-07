@@ -37,6 +37,7 @@ def jugar(fatq, fdef):
             if int(lanzamiento[0][comp]) > int(lanzamiento[1][comp]):
                 fdef -= 1
             else: fatq -= 1
+
     if fdef == 0: return "gana ataque"
     else: return "gana defensa "
 
@@ -72,23 +73,24 @@ for simulacion in range(simulaciones):  ## Ciclo for de simulacciones : por defe
     if simulacion/simulaciones*100 >= proceso_porct + 10: # porcentaje de calculo simulaciones
         proceso_porct += 10
         print('Simulando: %' + str(proceso_porct))
+print('Simulando: %100. Tiempo consumido en el cálculo : {:.4f} s'.format(time() - t))
 porct_vict = str(round(vict_ataque/simulaciones*100, 2))
 porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
 print('Simulaciones totales: ' + str(simulaciones))
 print('Victoria ataque: %' + porct_vict)
 print('Victoria defensa: %' + porct_derrot)
-print('Tiempo consumido en el calculo : {:.4f} s'.format(time() - t))
+
 # conector SQL para guardar datos en mi server MySql
 try:
-    connection = mysql.connector.connect(host='179.62.88.24',
+    conexion = mysql.connector.connect(host='179.62.88.24',
                                          database='SimuladorTeg',
                                          user='adminer',
                                          password='Ledhouse130d')
-    if connection.is_connected():
-        db_Info = connection.get_server_info()
+    if conexion.is_connected():
+        db_Info = conexion.get_server_info()
         print('')
         print("Conectado a illo MySql Version ", db_Info)
-        cursor = connection.cursor()
+        cursor = conexion.cursor()
         cursor.execute("select database();")
         record = cursor.fetchone()
         print("Esta conectado a la Base de datos: ", record)
@@ -97,14 +99,14 @@ try:
         recordTuple = (datetime.datetime.today(), simulaciones, fichas_ataque, \
             fichas_defensa, porct_vict, porct_derrot)
         cursor.execute(mySql_insert_query, recordTuple)
-        connection.commit()
+        conexion.commit()
         print("registro almacenado exitosamente")
 
 except Error as e:
     print("Error conectado a illo MySQL", e)
 finally:
 
-    if (connection.is_connected()):
+    if (conexion.is_connected()):
         cursor.close()
-        connection.close()
+        conexion.close()
         print("la conexion MySql fue desactivada")
