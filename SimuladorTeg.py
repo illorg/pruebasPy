@@ -19,32 +19,41 @@ def jugar(fatq, fdef):
     lanzamiento = ()
     comparar = 3
 
-    while fatq > 1 and fdef > 0: # Juega hasta que se acaben fichas
-        if fatq > 3: cant_d_ataque = 3
-        elif fatq == 3: cant_d_ataque = 2
-        else: cant_d_ataque = 1
+    while fatq > 1 and fdef > 0:  # Juega hasta que se acaben fichas
+        if fatq > 3:
+            cant_d_ataque = 3
+        elif fatq == 3:
+            cant_d_ataque = 2
+        else:
+            cant_d_ataque = 1
 
-        if fdef >= 3: cant_d_defensa = 3
-        elif fdef == 2: cant_d_defensa = 2
-        else: cant_d_defensa = 1
+        if fdef >= 3:
+            cant_d_defensa = 3
+        elif fdef == 2:
+            cant_d_defensa = 2
+        else:
+            cant_d_defensa = 1
 
         lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))  # llama tirar dados
         if cant_d_ataque <= cant_d_defensa:
             comparar = cant_d_ataque
-        else: comparar = cant_d_defensa
+        else:
+            comparar = cant_d_defensa
 
         for comp in range(0, comparar):
             if int(lanzamiento[0][comp]) > int(lanzamiento[1][comp]):
                 fdef -= 1
-            else: fatq -= 1
+            else:
+                fatq -= 1
 
-    if fdef == 0: return "gana ataque"
-    else: return "gana defensa "
+    if fdef == 0:
+        return "gana ataque"
+    else:
+        return "gana defensa "
 
 
 def tirar_dados(cant_d_ataque, cant_d_defensa):
-        
-    
+
     dados_ataque = [0, 0, 0]
     dados_defensa = [0, 0, 0]
     for x in range(0, 3):
@@ -64,13 +73,13 @@ if len(sys.argv) > 1:
 proceso_porct = 0
 fichas_ataque = int(input('Ingrese fichas del atacante: '))
 fichas_defensa = int(input('ingrese fichas del defensor: '))
-t = time() # start time for the for loop
-for simulacion in range(simulaciones):  ## Ciclo for de simulacciones : por defect 10mil
-    if jugar(fichas_ataque, fichas_defensa) == "gana ataque": # llama funcion jugar, envia cant fichas, devuelve ganador
+t = time()  # start time for the for loop
+for simulacion in range(simulaciones):  # Ciclo for de simulacciones : por defect 10mil
+    if jugar(fichas_ataque, fichas_defensa) == "gana ataque":  # llama funcion jugar, envia cant fichas, devuelve ganador
         vict_ataque += 1
     else:
         vict_defensa += 1
-    if simulacion/simulaciones*100 >= proceso_porct + 10: # porcentaje de calculo simulaciones
+    if simulacion/simulaciones*100 >= proceso_porct + 10:  # porcentaje de calculo simulaciones
         proceso_porct += 10
         print('Simulando: %' + str(proceso_porct))
 print('Simulando: %100. Tiempo consumido en el cálculo : {:.4f} s'.format(time() - t))
@@ -83,9 +92,9 @@ print('Victoria defensa: %' + porct_derrot)
 # conector SQL para guardar datos en mi server MySql
 try:
     conexion = mysql.connector.connect(host='179.62.88.24',
-                                         database='SimuladorTeg',
-                                         user='adminer',
-                                         password='Ledhouse130d')
+                                       database='SimuladorTeg',
+                                       user='adminer',
+                                       password='Ledhouse130d')
     if conexion.is_connected():
         db_Info = conexion.get_server_info()
         print('')
@@ -94,10 +103,11 @@ try:
         cursor.execute("select database();")
         record = cursor.fetchone()
         print("Esta conectado a la Base de datos: ", record)
-        mySql_insert_query = """INSERT INTO registro (fecha, simulaciones, fichas_ataque, fichas_defensa, porct_victoria_ataque, porct_victoria_defensa) 
-                           VALUES (%s, %s, %s, %s, %s, %s) """
-        recordTuple = (datetime.datetime.today(), simulaciones, fichas_ataque, \
-            fichas_defensa, porct_vict, porct_derrot)
+        mySql_insert_query = """INSERT INTO registro (fecha, simulaciones, fichas_ataque, fichas_defensa,
+         porct_victoria_ataque, porct_victoria_defensa)
+                           VALUES (%s, %s, %s, %s, %s, %s)"""
+        recordTuple = (datetime.datetime.today(), simulaciones, fichas_ataque,
+                       fichas_defensa, porct_vict, porct_derrot)
         cursor.execute(mySql_insert_query, recordTuple)
         conexion.commit()
         print("registro almacenado exitosamente")
