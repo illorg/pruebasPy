@@ -20,7 +20,7 @@ def jugar(fatq, fdef):
     comparar = 3
 
     while fatq > 1 and fdef > 0:  # Juega hasta que se acaben fichas
-        if fatq > 3:
+        if fatq > 3: #defino cant dados de ataque
             cant_d_ataque = 3
         elif fatq == 3:
             cant_d_ataque = 2
@@ -29,10 +29,8 @@ def jugar(fatq, fdef):
 
         if fdef >= 3:
             cant_d_defensa = 3
-        elif fdef == 2:
-            cant_d_defensa = 2
         else:
-            cant_d_defensa = 1
+            cant_d_defensa = fdef
 
         lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))  # llama tirar dados
         if cant_d_ataque <= cant_d_defensa:
@@ -85,9 +83,9 @@ for simulacion in range(simulaciones):  # Ciclo for de simulacciones : por defec
 print('Simulando: %100. Tiempo consumido en el cálculo : {:.4f} s'.format(time() - t))
 porct_vict = str(round(vict_ataque/simulaciones*100, 2))
 porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
-print('Simulaciones totales: ' + str(simulaciones))
-print('Victoria ataque: %' + porct_vict)
-print('Victoria defensa: %' + porct_derrot)
+print(f'Simulaciones totales:  {simulaciones}')
+print(f'Victoria ataque: %{porct_vict}')
+print(f'Victoria defensa: %{porct_derrot}')
 
 # conector SQL para guardar datos en mi server MySql
 try:
