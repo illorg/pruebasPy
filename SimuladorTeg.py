@@ -20,20 +20,20 @@ def jugar(fatq, fdef):
     comparar = 3
 
     while fatq > 1 and fdef > 0:  # Juega hasta que se acaben fichas
-        if fatq > 3: #defino cant dados de ataque
+        if fatq > 3: # defino cant dados de ataque
             cant_d_ataque = 3
         elif fatq == 3:
             cant_d_ataque = 2
         else:
             cant_d_ataque = 1
 
-        if fdef >= 3:
+        if fdef >= 3: # defino cant dados defen
             cant_d_defensa = 3
         else:
             cant_d_defensa = fdef
 
         lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))  # llama tirar dados
-        if cant_d_ataque <= cant_d_defensa:
+        if cant_d_ataque <= cant_d_defensa: # elige cuantos dados se comparan
             comparar = cant_d_ataque
         else:
             comparar = cant_d_defensa
@@ -117,4 +117,4 @@ finally:
     if (conexion.is_connected()):
         cursor.close()
         conexion.close()
-        print("la conexion MySql fue desactivada")
+        print("la conexion MySql finalizo correctamente")
