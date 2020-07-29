@@ -20,20 +20,20 @@ def jugar(fatq, fdef):
     comparar = 3
 
     while fatq > 1 and fdef > 0:  # Juega hasta que se acaben fichas
-        if fatq > 3: # defino cant dados de ataque
+        if fatq > 3:  # defino cant dados de ataque
             cant_d_ataque = 3
         elif fatq == 3:
             cant_d_ataque = 2
         else:
             cant_d_ataque = 1
 
-        if fdef >= 3: # defino cant dados defen
+        if fdef >= 3:  # defino cant dados defen
             cant_d_defensa = 3
         else:
             cant_d_defensa = fdef
 
-        lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))  # llama tirar dados
-        if cant_d_ataque <= cant_d_defensa: # elige cuantos dados se comparan
+        lanzamiento = (tirar_dados(cant_d_ataque, cant_d_defensa))  # llama funcion tirar dados
+        if cant_d_ataque <= cant_d_defensa:  # elige cuantos dados se comparan
             comparar = cant_d_ataque
         else:
             comparar = cant_d_defensa
@@ -45,9 +45,9 @@ def jugar(fatq, fdef):
                 fatq -= 1
 
     if fdef == 0:
-        return "gana ataque"
+        return True
     else:
-        return "gana defensa "
+        return False
 
 
 def tirar_dados(cant_d_ataque, cant_d_defensa):
@@ -64,57 +64,72 @@ def tirar_dados(cant_d_ataque, cant_d_defensa):
     return (dados_ataque, dados_defensa)
 
 
-# EJECUCION ######
-if len(sys.argv) > 1:
-    simulaciones = int(sys.argv[1])
-
-proceso_porct = 0
-fichas_ataque = int(input('Ingrese fichas del atacante: '))
-fichas_defensa = int(input('ingrese fichas del defensor: '))
-t = time()  # start time for the for loop
-for simulacion in range(simulaciones):  # Ciclo for de simulacciones : por defect 10mil
-    if jugar(fichas_ataque, fichas_defensa) == "gana ataque":  # llama funcion jugar, envia cant fichas, devuelve ganador
-        vict_ataque += 1
+def run():
+        
+    # EJECUCION ######
+    global fichas_ataque
+    global fichas_defensa
+    global simulaciones
+    global vict_ataque
+    global vict_defensa    
+    if len(sys.argv) > 1:
+        simulaciones = int(sys.argv[1])
+        fichas_ataque = int(sys.argv[2])
+        fichas_defensa = int(sys.argv[3])
     else:
-        vict_defensa += 1
-    if simulacion/simulaciones*100 >= proceso_porct + 10:  # porcentaje de calculo simulaciones
-        proceso_porct += 10
-        print('Simulando: %' + str(proceso_porct))
-print('Simulando: %100. Tiempo consumido en el cálculo : {:.4f} s'.format(time() - t))
-porct_vict = str(round(vict_ataque/simulaciones*100, 2))
-porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
-print(f'Simulaciones totales:  {simulaciones}')
-print(f'Victoria ataque: %{porct_vict}')
-print(f'Victoria defensa: %{porct_derrot}')
+        fichas_ataque = int(input('Ingrese fichas del atacante: '))
+        fichas_defensa = int(input('ingrese fichas del defensor: '))
 
-# conector SQL para guardar datos en mi server MySql
-try:
-    conexion = mysql.connector.connect(host='179.62.88.24',
-                                       database='SimuladorTeg',
-                                       user='adminer',
-                                       password='Ledhouse130d')
-    if conexion.is_connected():
-        db_Info = conexion.get_server_info()
-        print('')
-        print("Conectado a illo MySql Version ", db_Info)
-        cursor = conexion.cursor()
-        cursor.execute("select database();")
-        record = cursor.fetchone()
-        print("Esta conectado a la Base de datos: ", record)
-        mySql_insert_query = """INSERT INTO registro (fecha, simulaciones, fichas_ataque, fichas_defensa,
-         porct_victoria_ataque, porct_victoria_defensa)
-                           VALUES (%s, %s, %s, %s, %s, %s)"""
-        recordTuple = (datetime.datetime.today(), simulaciones, fichas_ataque,
-                       fichas_defensa, porct_vict, porct_derrot)
-        cursor.execute(mySql_insert_query, recordTuple)
-        conexion.commit()
-        print("registro almacenado exitosamente")
+    proceso_porct = 0
+    t = time()  # inicializo Timer
+    for simulacion in range(simulaciones):  # Ciclo for de simulacciones : por defect 10K
+        if jugar(fichas_ataque, fichas_defensa) is True:  # llama funcion jugar, envia cant fichas, devuelve ganador
+            vict_ataque += 1
+        else:
+            vict_defensa += 1
+        if simulacion/simulaciones*100 >= proceso_porct + 10:  # porcentaje de calculo simulaciones
+            proceso_porct += 10
+            print('Simulando: %' + str(proceso_porct))
+    print('Simulando: %100. Tiempo consumido en el cálculo : {:.4f} s'.format(time() - t))
+    porct_vict = str(round(vict_ataque/simulaciones*100, 2))
+    porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
+    print(f'Simulaciones totales:  {simulaciones}')
+    print(f'Victoria ataque: %{porct_vict}')
+    print(f'Victoria defensa: %{porct_derrot}')
 
-except Error as e:
-    print("Error conectado a illo MySQL", e)
-finally:
+    # conector SQL para guardar datos en mi server MySql
+    try:
+        conexion = mysql.connector.connect(host='179.62.88.24',
+                                        database='SimuladorTeg',
+                                        user='adminer',
+                                        password='Ledhouse130d')
+        if conexion.is_connected():
+            db_Info = conexion.get_server_info()
+            print('')
+            print("Conectado a illo MySql Version ", db_Info)
+            cursor = conexion.cursor()
+            cursor.execute("select database();")
+            record = cursor.fetchone()
+            print("Esta conectado a la Base de datos: ", record)
+            mySql_insert_query = """INSERT INTO registro (fecha, simulaciones, fichas_ataque, fichas_defensa,
+            porct_victoria_ataque, porct_victoria_defensa)
+                            VALUES (%s, %s, %s, %s, %s, %s)"""
+            recordTuple = (datetime.datetime.today(), simulaciones, fichas_ataque,
+                        fichas_defensa, porct_vict, porct_derrot)
+            cursor.execute(mySql_insert_query, recordTuple)
+            conexion.commit()
+            print("registro almacenado exitosamente")
 
-    if (conexion.is_connected()):
-        cursor.close()
-        conexion.close()
-        print("la conexion MySql finalizo correctamente")
+    except Error as e:
+        print("Error conectado a illo MySQL", e)
+    finally:
+
+        if (conexion.is_connected()):
+            cursor.close()
+            conexion.close()
+            print("la conexion MySql finalizo correctamente")
+
+
+if __name__=='__main__':
+    run()
+    
