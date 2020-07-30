@@ -12,6 +12,17 @@ def increments():
     global counter
     counter += 1
     counter_lbl['text'] = str(counter)
+    if ataque_entry.get() > "" and defensa_entry.get() > "":
+        btnluzcargado['bg'] = 'Green'
+        btnluzcargar['bg'] = 'Black'
+        if btnluzsimular['bg'] == 'Black':
+            btnluzsimular['bg'] = 'Blue'
+        else:
+            btnluzsimular['bg'] = 'Black'
+    else:
+        btnluzcargado['bg'] = 'Black'
+        btnluzcargar['bg'] = 'Green'
+
     app.after(1000, increments)
 
 
@@ -37,6 +48,7 @@ counter = 0
 opciones_simulaciones = ["10000", "100000", "500000", "1000000"]
 resultado = ""
 th = threading.Thread(target=ejecutar_sim)
+######   Elementos Visuales
 app.title('Simulador Probabilidades TEG Python')
 app.geometry("400x250")
 variable_simulaciones = tk.StringVar(app)
@@ -61,7 +73,12 @@ simulaciones_lbl.grid(row=3, column=0, pady=5, padx=5)
 simulaciones_opt = tk.OptionMenu(app, variable_simulaciones,
                                  *opciones_simulaciones)
 simulaciones_opt.grid(row=3, column=1, pady=5, padx=5, sticky=tk.E + tk.W)
-
+btnluzcargar = tk.Button(app, text="INGRESAR", fg="white", bg="Green", width=15) 
+btnluzcargar.grid(row=0, column=3)
+btnluzcargado = tk.Button(app, text="CARGADO", fg="white", bg="Black", width=15) 
+btnluzcargado.grid(row=1, column=3)
+btnluzsimular = tk.Button(app, text="SIMULAR", fg="white", bg="Black", width=15) 
+btnluzsimular.grid(row=2, column=3)
 app.bind("<Double-Button-1>", on_double_click)
 app.after(1000, increments)
 app.mainloop()
