@@ -78,9 +78,6 @@ defensa_lbl = tk.Label(app, text='Fichas de defensa')
 defensa_lbl.grid(row=2, column=0, pady=5, padx=5, sticky=tk.W)
 defensa_entry = tk.Entry()
 defensa_entry.grid(row=2, column=1, pady=5, padx=5)
-ejecutar_btn = tk.Button(app, text="simular", width=10,
-                         pady=5, padx=5, command=arrancadorTH2)
-ejecutar_btn.grid(row=4, column=0)
 simulaciones_lbl = tk.Label(app, text='Nro de simulaciones')
 simulaciones_lbl.grid(row=3, column=0, pady=5, padx=5)
 simulaciones_opt = tk.OptionMenu(app, variable_simulaciones,
