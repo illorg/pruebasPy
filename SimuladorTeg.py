@@ -2,6 +2,7 @@ import random
 import datetime
 import sys
 import mysql.connector
+import numpy as np
 from mysql.connector import Error
 from time import time
 
@@ -16,7 +17,7 @@ def jugar(fatq, fdef):
 
     cant_d_ataque = 0
     cant_d_defensa = 0
-    lanzamiento = ()
+    lanzamiento = np.array([[0, 0, 0], [0, 0, 0]], dtype='int8')
     comparar = 3
 
     while fatq > 1 and fdef > 0:  # Juega hasta que se acaben fichas
@@ -52,15 +53,15 @@ def jugar(fatq, fdef):
 
 def tirar_dados(cant_d_ataque, cant_d_defensa):
 
-    dados_ataque = [0, 0, 0]
-    dados_defensa = [0, 0, 0]
+    dados_ataque = np.array([0, 0, 0], dtype='int8')
+    dados_defensa = np.array([0, 0, 0], dtype='int8')
     for x in range(0, 3):
         if (x + 1) <= cant_d_ataque:
             dados_ataque[x] = random.randint(1, 6)
         if (x + 1) <= cant_d_defensa:
             dados_defensa[x] = random.randint(1, 6)
-    dados_ataque.sort(reverse=True)
-    dados_defensa.sort(reverse=True)
+    dados_ataque = -np.sort(-dados_ataque)
+    dados_defensa = -np.sort(-dados_defensa)
     return (dados_ataque, dados_defensa)
 
 
