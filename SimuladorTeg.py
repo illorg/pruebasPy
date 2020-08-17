@@ -11,6 +11,10 @@ fichas_defensa = 0
 simulaciones = 10000
 vict_ataque = 0
 vict_defensa = 0
+#  variables para muestra
+muestra = []
+victorias_ant = 0
+simulaciones_ant = 0
 
 
 def jugar(fatq, fdef):
@@ -65,6 +69,19 @@ def tirar_dados(cant_d_ataque, cant_d_defensa):
     return (dados_ataque, dados_defensa)
 
 
+def muestreo(simulaciones_act):
+    global simulaciones_ant
+    global victorias_ant
+    global muestra
+
+    simulaciones_act = simulaciones_act - simulaciones_ant
+    periodo_victorias = vict_ataque - victorias_ant
+    muestra.insert(0, periodo_victorias/simulaciones_act)
+    simulaciones_ant = simulaciones_act + simulaciones_ant
+    victorias_ant = vict_ataque
+    print(muestra)
+
+
 def run():
         
     # EJECUCION ######
@@ -72,25 +89,29 @@ def run():
     global fichas_defensa
     global simulaciones
     global vict_ataque
-    global vict_defensa    
+    global vict_defensa
     if len(sys.argv) > 1:
         simulaciones = int(sys.argv[1])
         fichas_ataque = int(sys.argv[2])
         fichas_defensa = int(sys.argv[3])
+        analitica_muestra = int(sys.argv[4])
     else:
         fichas_ataque = int(input('Ingrese fichas del atacante: '))
         fichas_defensa = int(input('ingrese fichas del defensor: '))
 
     proceso_porct = 0
+    muestra = []
     t = time()  # inicializo Timer
     for simulacion in range(simulaciones):  # Ciclo for de simulacciones : por defect 10K
         if jugar(fichas_ataque, fichas_defensa) is True:  # llama funcion jugar, envia cant fichas, devuelve ganador
             vict_ataque += 1
         else:
             vict_defensa += 1
-        if simulacion/simulaciones*100 >= proceso_porct + 10:  # porcentaje de calculo simulaciones
-            proceso_porct += 10
+        if simulacion/simulaciones*100 >= proceso_porct + 1:  # porcentaje de calculo simulaciones
+            proceso_porct += 1
+            muestreo(simulacion) # llamo a muestreo
             print('Simulando: %' + str(proceso_porct))
+    muestreo(simulaciones)
     print('Simulando: %100. Tiempo consumido en el cálculo : {:.4f} s'.format(time() - t))
     porct_vict = str(round(vict_ataque/simulaciones*100, 2))
     porct_derrot = str(round(vict_defensa/simulaciones*100, 2))
